@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#120824">
+    <title>Digit Reader · CNN on MNIST</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+
+    <main class="wrap">
+    <header>
+        <span class="badge">🐾 CS · Intelligent System · Midterm Practical Exam</span>
+        <h1>Digit <span>Reader</span></h1>
+        <p class="sub">A Convolutional Neural Network trained on MNIST. Draw a digit from 0 to 9 and the model reads it, right in your browser.</p>
+        <div class="chips">
+        <div class="chip"><b id="chipAcc">—</b><small>test accuracy</small></div>
+        <div class="chip"><b id="chipCorrect">—</b><small>unseen images correct</small></div>
+        <div class="chip"><b id="chipEpochs">—</b><small>epochs + augmentation</small></div>
+        </div>
+    </header>
+
+    <section class="grid">
+        <div class="card">
+        <h2><i>1</i> Draw here</h2>
+        <div class="canvas-box">
+            <canvas id="pad" width="280" height="280"></canvas>
+            <div id="hint" class="hint">Draw a big digit<br>in the middle</div>
+        </div>
+        <div class="row">
+            <button id="clear" class="btn ghost" type="button">Clear</button>
+            <button id="predict" class="btn" type="button">Predict</button>
+        </div>
+        <label class="auto"><input type="checkbox" id="auto" checked> Auto-predict when I lift my pen</label>
+        <div class="seen">
+            <canvas id="seen" width="28" height="28"></canvas>
+            <p><b>What the model sees</b><br>Your drawing is cropped, resized to 20×20 and centered in 28×28 pixels, just like MNIST.</p>
+        </div>
+        </div>
+
+        <div class="card">
+        <h2><i>2</i> Prediction</h2>
+        <div class="result">
+            <div id="digit" class="digit">?</div>
+            <div class="conf"><span id="conf">0</span><em>%</em><small>confidence</small></div>
+        </div>
+        <p id="msg" class="msg">Draw a digit to start.</p>
+        <div id="bars" class="bars"></div>
+        <p id="status" class="status">Loading model…</p>
+        </div>
+    </section>
+
+    <section class="card how">
+        <h2>How it works</h2>
+        <ol>
+        <li><b>Data:</b> MNIST, 70,000 handwritten digits (28×28 pixels). 60,000 for training, 10,000 for testing.</li>
+        <li><b>Model:</b> CNN with 4 Conv layers, 2 MaxPooling layers, Dropout, a Dense layer of 128, and a softmax output of 10 probabilities.</li>
+        <li><b>Training:</b> <span id="howEpochs">several</span> epochs, batch size 128, Adam optimizer, with rotation, zoom and shift augmentation. 54,000 images train the model and 6,000 validate it.</li>
+        <li><b>Testing:</b> 10,000 images the model never saw: <span id="howResult">see the chips above</span>.</li>
+        <li><b>Limits:</b> the model must pick one of the 10 digits. It has no “not a digit” class, so a scribble still gets a guess. The page only blocks marks that are too tiny (like a dot) and shows "Not sure" when the confidence is low.</li>
+        </ol>
+    </section>
+
+    <footer>Group 2 &nbsp;·&nbsp; Members: Languido, Capilitan, Santillas, Cinco &nbsp;·&nbsp; Python (Keras) + JavaScript</footer>
+    </main>
+
+    <script src="weights.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
